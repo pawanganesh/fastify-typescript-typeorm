@@ -4,11 +4,15 @@ import { User } from "../entities/user.entity";
 
 @EntityRepository(User)
 export class UserRespository extends Repository<User> {
-  getUserByEmail = async (email: string) => {
-    return await this.findOne({ email });
-  };
-
-  getUserById = async (id: number) => {
-    return await this.findOne({ id });
+  getUserWithPasswordByEmail = async (email: string) => {
+    return await this.createQueryBuilder("users")
+      .select("users.id")
+      .addSelect("users.password")
+      .where("users.email=:email", { email })
+      .getOne();
   };
 }
+
+export const userRepository = () => {
+  return getCustomRepository(UserRespository);
+};

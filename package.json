@@ -1,9 +1,11 @@
 {
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "fastify": "^3.25.2",
     "fastify-plugin": "^3.0.0",
+    "fastify-swagger": "^4.13.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",

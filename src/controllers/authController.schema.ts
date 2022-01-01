@@ -41,6 +41,8 @@ const RegisterResponseSchema = {
 };
 
 export const LoginSchema = {
+  tags: ["User"],
+  description: "Get auth token",
   body: LoginRequestSchema,
   response: {
     200: LoginResponseSchema,
@@ -49,6 +51,8 @@ export const LoginSchema = {
 };
 
 export const RegisterSchema = {
+  tags: ["User"],
+  description: "Register new user",
   body: RegisterRequestSchema,
   response: {
     200: RegisterResponseSchema,
