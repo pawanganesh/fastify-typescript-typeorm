@@ -9,9 +9,7 @@ import { Handler404 } from "./helpers/replies";
 
 const app = (opts: FastifyServerOptions = {}) => {
   const server = Fastify(opts);
-  console.log("Before connectDB");
   server.register(connectDB);
-  console.log("After connectDB");
   server.setNotFoundHandler(Handler404);
 
   // Swagger docs

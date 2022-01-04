@@ -4,7 +4,6 @@ import fastifyPlugin from "fastify-plugin";
 import { createConnection } from "typeorm";
 
 const connectDB: FastifyPluginCallback = async (fastify) => {
-  console.log("------------------------------------");
   // TypeORM database integration
   await createConnection({
     type: "postgres",

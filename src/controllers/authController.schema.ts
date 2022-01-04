@@ -24,10 +24,10 @@ const MessageResponseSchema = {
 
 const RegisterRequestSchema = {
   type: "object",
-  required: [...LoginRequestSchema.required, "full_name"],
+  required: [...LoginRequestSchema.required, "fullName"],
   properties: {
     ...LoginRequestSchema.properties,
-    full_name: { type: "string" },
+    fullName: { type: "string" },
   },
   additionalProperties: false,
 };
@@ -35,7 +35,7 @@ const RegisterRequestSchema = {
 const RegisterResponseSchema = {
   type: "object",
   properties: {
-    full_name: { type: "string" },
+    fullName: { type: "string" },
     email: { type: "string" },
   },
 };

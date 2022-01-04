@@ -1,14 +1,15 @@
+import { FastifyReply } from "fastify";
 import { compare, hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { IBody, IRegisterBody } from "../interfaces/user.interface";
 import { getUserWithPasswordByEmail } from "./userService";
-
 import { userRepository } from "../repositories/userRepository";
 import { sendGridMail } from "../helpers/mail-notification";
+
 const SALT_ROUND = 9;
 
-export const createToken = (id: number, email: string) => {
+export const createToken = async (id: number, email: string) => {
   const token = jwt.sign({ id, email }, process.env.JWT_SECRET!, {
     algorithm: "HS256",
     expiresIn: "24h",
@@ -19,8 +20,9 @@ export const createToken = (id: number, email: string) => {
 export const createUser = async (user: IRegisterBody) => {
   user.password = await hash(user.password, SALT_ROUND);
   const { password, ...savedUser } = await userRepository().save(user);
+
   // TODO: send verification email
-  const token = createToken(savedUser.id, savedUser.email);
+  const token = await createToken(savedUser.id, savedUser.email);
   await sendGridMail(
     user.email,
     `Please verify your account`,
@@ -29,18 +31,17 @@ export const createUser = async (user: IRegisterBody) => {
   return savedUser;
 };
 
-export const loginUser = async (payload: IBody) => {
+export const loginUser = async (payload: IBody, reply: FastifyReply) => {
   const user = await getUserWithPasswordByEmail(payload.email);
   if (!user) {
-    // return reply.code(401).send({ message: "Invalid email or password" });
-    return new Error("Invalid email or password");
+    return reply.code(401).send({ message: "Invalid email or password" });
   }
 
   const isPasswordValid = await compare(payload.password, user.password);
   if (!isPasswordValid) {
-    // return reply.code(401).send({ message: "Invalid email or password" });
-    return new Error("Invalid email or password");
+    return reply.code(401).send({ message: "Invalid email or password" });
   }
-  const access_token = createToken(user.id, user.email);
+  const access_token = await createToken(user.id, payload.email);
+
   return { access_token };
 };

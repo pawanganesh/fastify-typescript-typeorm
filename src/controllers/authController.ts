@@ -8,7 +8,7 @@ const userLoginController: RouteHandler<{ Body: IBody }> = async (
   request,
   reply
 ) => {
-  return loginUser(request.body);
+  return loginUser(request.body, reply);
 };
 
 const emailExistsHandler: RouteHandler<{ Body: IRegisterBody }> = async (
